@@ -8,29 +8,38 @@ datasource db {
 }
 
 model Doctor {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   name      String
-  email     String   @unique
+  email     String    @unique
   password  String
   specialty String
   pdfs      PDF[]
-  role      String   @default("doctor")
-  patients  Patient[]
+  role      String    @default("doctor")
+  patients  DoctorPatient[]
 }
 
 model Patient {
-  id      Int      @id @default(autoincrement())
-  name    String
-  email   String   @unique
-  password String
-  role    String   @default("user")
-  doctors Doctor[]
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  password  String
+  role      String    @default("user")
+  doctors   DoctorPatient[]
 }
 
 model PDF {
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   doctorId   Int
   filePath   String
-  uploadDate DateTime @default(now())
-  doctor     Doctor   @relation(fields: [doctorId], references: [id])
+  uploadDate DateTime  @default(now())
+  doctor     Doctor    @relation(fields: [doctorId], references: [id])
+}
+
+model DoctorPatient {
+  doctorId   Int
+  patientId  Int
+  doctor     Doctor    @relation(fields: [doctorId], references: [id])
+  patient    Patient   @relation(fields: [patientId], references: [id])
+  
+  @@id([doctorId, patientId])
 }

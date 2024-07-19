@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 const Sidebar = () => {
   const navigate = useRouter();
+  const token=localStorage.getItem('ai_token')
   const handleLogout = () => {
     localStorage.removeItem("ai_token");
     navigate.replace("/");

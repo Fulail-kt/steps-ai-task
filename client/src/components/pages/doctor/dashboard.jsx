@@ -49,6 +49,7 @@ const Dashboard = () => {
     const token = localStorage.getItem("ai_token");
     const decode = jwtDecode(token);
     const response = await getDoctor(decode?.id);
+    console.log(response,"eh")
     if (response.success) {
       setData(response.doctor);
     }
