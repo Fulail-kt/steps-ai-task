@@ -54,7 +54,7 @@ const Patients = () => {
         }
     };
 
-    const isConnected = (patient) => patient.doctors?.map((doc)=>console.log(doc))
+    // const isConnected = (patient) => patient.doctors?.map((doc)=>console.log(doc))
 
     console.log(patients,isConnected,"dp")
 
