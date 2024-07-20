@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import dbConnect from "./config/db.js";
+import {dbConnect} from "./config/db.js";
 import doctorRouter from "./routes/doctor.js";
 import userRouter from "./routes/user.js";
 import cors from 'cors'

@@ -44,7 +44,7 @@ export const login = async (req,res) => {
     if (!patient) {
       return res
         .status(400)
-        .json({ error: "Invalid credentials", success: false });
+        .json({ message: "Invalid credentials", success: false });
     }
 
     const validPassword = await bcrypt.compare(password, patient.password);
@@ -63,7 +63,7 @@ export const login = async (req,res) => {
     );
     res.json({ token, message: "login successful", success: true });
   } catch (error) {
-    res.status(400).json({ error: "Login failed", success: false });
+    res.status(400).json({ message: "Login failed", success: false });
   }
 };
 
@@ -74,7 +74,7 @@ export const getDoctors = async (req,res) => {
     res.status(200).json({ doctors, message: "retrieved all doctors", success: true });
   } catch (error) {
     console.log(error)
-    res.status(400).json({ error: "failed", success: false });
+    res.status(400).json({ message: "failed", success: false });
 
   }
 };
@@ -106,7 +106,7 @@ export const getDoctor = async (req, res) => {
     res.status(200).json({ doctor, message: "Retrieved doctor successfully", success: true });
   } catch (error) {
     console.error("Error retrieving doctor:", error);
-    res.status(500).json({ error: "Failed to retrieve doctor", success: false });
+    res.status(500).json({ message: "Failed to retrieve doctor", success: false });
   }
 };
 export const getPatient = async (req, res) => {
@@ -133,6 +133,6 @@ export const getPatient = async (req, res) => {
     res.status(200).json({ patient, message: "Retrieved patient successfully", success: true });
   } catch (error) {
     console.error("Error retrieving patient:", error);
-    res.status(500).json({ error: "Failed to retrieve patient", success: false });
+    res.status(500).json({ message: "Failed to retrieve patient", success: false });
   }
 };
