@@ -43,3 +43,4 @@ model DoctorPatient {
   
   @@id([doctorId, patientId])
 }
+

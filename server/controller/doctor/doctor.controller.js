@@ -86,16 +86,15 @@ export const getPatients = async (req, res) => {
 export const linkPatient = async (req, res) => {
   const { doctorId, patientId } = req.body;
   try {
-    await prisma.doctor.update({
-      where: { id: doctorId },
+    await prisma.doctorPatient.create({
       data: {
-        patients: {
-          connect: { id: patientId },
-        },
+        doctor: { connect: { id: doctorId } },
+        patient: { connect: { id: patientId } },
       },
     });
     res.json({ message: "Patient linked successfully", success: true });
   } catch (error) {
+    console.log(error);
     res.status(400).json({ error: "Failed to link patient", success: false });
   }
 };
