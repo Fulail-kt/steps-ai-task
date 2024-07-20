@@ -16,7 +16,7 @@ const DoctorCard = ({doctor}) => {
               />
               <h2 className="text-xl ">Dr.{doctor?.name}</h2>
               <div className='flex justify-center'>
-                  <p className="mb-2 w-1/2 text-xs bg-cyan-600 rounded-md p-1 ">{doctor?.specialty}</p>
+                  <p className="mb-2 min:w-1/2 text-xs bg-cyan-600 rounded-md p-1 ">{doctor?.specialty}</p>
               </div>
               
             </div>

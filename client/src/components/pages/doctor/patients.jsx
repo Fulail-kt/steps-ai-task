@@ -1,21 +1,25 @@
 'use client'
 import { jwtDecode } from 'jwt-decode'
 import React, { useEffect, useState } from 'react'
-import { getAllPatients, linkPatient } from '../../../app/services/axios/end-points'
+import { getAllPatients, getDoctor, linkPatient } from '../../../app/services/axios/end-points'
 import Image from 'next/image'
+import  defaultPatient from '../../../../public/images/avatar.png'
 
 const Patients = () => {
     const [doctorId, setDoctorId] = useState('')
     const [patients, setPatients] = useState([])
+    const [doctor, setDoctor] = useState({})
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
 
-    const getPatients = async () => {
+    const getPatients = async (id) => {
         try {
             setLoading(true)
+            const doc = await getDoctor(id)
             const response = await getAllPatients()
-            if (response.success) {
-                setPatients(response.doctors || [])
+            if (response?.success && response?.success) {
+                setPatients(response?.doctors || [])
+                setDoctor(doc?.doctor || [])
             } else {
                 setError(response.message || 'Failed to load patients')
             }
@@ -26,14 +30,20 @@ const Patients = () => {
         }
     }
 
+    console.log(doctor,"do")
+
     useEffect(() => {   
         const token = localStorage.getItem('ai_token');
         if (token) {
             const decode = jwtDecode(token);
             setDoctorId(decode?.id)
+            getPatients(decode?.id)
         }
-        getPatients()
     }, [])
+
+    const isConnected = (patient) => {
+        return patient.doctors.some(doc => doc.doctorId === parseInt(doctorId))
+    }
 
     const handleSendIds = async (patientId) => {
         try {
@@ -42,7 +52,7 @@ const Patients = () => {
                 setPatients(prevPatients => 
                     prevPatients.map(patient => 
                         patient.id === patientId 
-                            ? {...patient, doctors: [...(patient.doctors || []), doctorId]} 
+                            ? {...patient, doctors: [...(patient.doctors || []), {doctorId: parseInt(doctorId), patientId}]} 
                             : patient
                     )
                 )
@@ -54,9 +64,7 @@ const Patients = () => {
         }
     };
 
-    // const isConnected = (patient) => patient.doctors?.map((doc)=>console.log(doc))
-
-    console.log(patients,isConnected,"dp")
+    console.log(patients, "dp")
 
     if (loading) return <div className="flex justify-center items-center h-screen">Loading...</div>
     if (error) return <div className="text-red-500 text-center p-4">{error}</div>
@@ -74,7 +82,7 @@ const Patients = () => {
                             <div className="p-6 flex items-center justify-between">
                                 <div className='bg-gray-600 rounded-full w-20 h-20 flex-shrink-0 mr-4'>
                                     <Image 
-                                        src={patient?.image || '/default-avatar.png'} 
+                                        src={patient?.image || defaultPatient } 
                                         alt={patient?.name}
                                         width={80}
                                         height={80}
@@ -84,17 +92,18 @@ const Patients = () => {
                                 <div className="flex-grow">
                                     <h2 className="text-xl font-semibold mb-2 text-white">{patient.name}</h2>
                                     <p className="text-gray-400 mb-4">{patient.email}</p>
-                                    <button
-                                        onClick={() => handleSendIds(patient.id)}
-                                        className={`${
-                                            isConnected(patient)
-                                                ? 'bg-green-500 cursor-not-allowed'
-                                                : 'bg-blue-500 hover:bg-blue-600'
-                                        } text-white font-bold py-2 px-4 rounded transition duration-300`}
-                                        disabled={isConnected(patient)}
-                                    >
-                                        {isConnected(patient) ? 'Connected' : 'Connect'}
-                                    </button>
+                                    {isConnected(patient) ? (
+                                        <span className="bg-green-500 text-white font-bold py-2 px-4 rounded">
+                                            Connected
+                                        </span>
+                                    ) : (
+                                        <button
+                                            onClick={() => handleSendIds(patient.id)}
+                                            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300"
+                                        >
+                                            Connect
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         </div>

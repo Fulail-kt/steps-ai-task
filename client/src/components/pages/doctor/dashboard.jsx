@@ -7,6 +7,7 @@ import { storage } from "../../../app/services/firebase/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { toast } from "sonner";
 import Image from "next/image";
+import defaultDoc from '../../../../public/images/default.png'
 
 const Dashboard = () => {
   const [data, setData] = useState();
@@ -50,8 +51,8 @@ const Dashboard = () => {
     const decode = jwtDecode(token);
     const response = await getDoctor(decode?.id);
     console.log(response,"eh")
-    if (response.success) {
-      setData(response.doctor);
+    if (response?.success) {
+      setData(response?.doctor);
     }
   };
 
@@ -98,7 +99,7 @@ const Dashboard = () => {
                   </div>
                 </div>
                 <div className="bg-gray-800 size-24 rounded-full">
-                  <Image src={data?.image} alt={data?.name} />
+                  <Image src={data?.image||defaultDoc} alt={data?.name} />
                 </div>
               </div>
             </div>

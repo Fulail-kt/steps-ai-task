@@ -79,6 +79,7 @@ export const getDoctors = async (req,res) => {
   }
 };
 
+
 export const getDoctor = async (req, res) => {
   console.log("first")
   try {
@@ -93,7 +94,11 @@ export const getDoctor = async (req, res) => {
       where: { id: id },
       include: {
         pdfs: true,
-        patients: true
+        patients: {
+          include: {
+            patient: true
+          }
+        }
       }
     });
 
@@ -103,12 +108,23 @@ export const getDoctor = async (req, res) => {
       return res.status(404).json({ message: "Doctor not found", success: false });
     }
 
-    res.status(200).json({ doctor, message: "Retrieved doctor successfully", success: true });
+    // Restructure the patients data to include full patient details
+    const restructuredDoctor = {
+      ...doctor,
+      patients: doctor.patients.map(dp => ({
+        ...dp.patient,
+        doctorId: dp.doctorId,
+        patientId: dp.patientId
+      }))
+    };
+
+    res.status(200).json({ doctor: restructuredDoctor, message: "Retrieved doctor successfully", success: true });
   } catch (error) {
     console.error("Error retrieving doctor:", error);
     res.status(500).json({ message: "Failed to retrieve doctor", success: false });
   }
 };
+
 export const getPatient = async (req, res) => {
   try {
     console.log("first")

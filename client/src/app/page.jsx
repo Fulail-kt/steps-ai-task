@@ -37,12 +37,12 @@ export default function Home() {
               </Link></span>
             </p>
             <div className="flex justify-center gap-6">
-              <Link href='/sign-up'>
+              <Link href='/sign-in'>
                 <button className="bg-lime-800 text-white px-5 py-2  rounded-full hover:bg-lime-700">
                   Join as Patient
                 </button>
               </Link>
-              <Link href='/doc/register'>
+              <Link href='/doc/sign-in'>
                 <button className="bg-pink-900 text-white px-5 py-2 rounded-full hover:bg-pink-800">
                   Join as Doctor
                 </button>
@@ -51,11 +51,11 @@ export default function Home() {
 
           </div>
           <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-           {doctors.map((doctor)=>(
-            <DoctorCard doctor={doctor}/>
-           ))} 
-          
-          </div>
+  {doctors.slice(0, 3).map((doctor) => (
+    <DoctorCard key={doctor.id} doctor={doctor} />
+  ))}
+</div>
+
         </div>
       </main>
       </>
