@@ -23,12 +23,9 @@ const prisma = new PrismaClient();
 
 const dbConnect = async () => {
   try {
-    // Test the connection
+  
     await prisma.$queryRaw`SELECT 1`;
     console.log("Database connected successfully!");
-    
-    // Optionally push schema changes
-    // Comment out this block if you don't want automatic schema updates
     try {
       console.log("Pushing schema changes...");
       execSync('npx prisma db push', { stdio: 'inherit' });
@@ -40,8 +37,6 @@ const dbConnect = async () => {
     return prisma;
   } catch (error) {
     console.error("Unable to connect to the database:", error);
-    // Optionally, you might want to exit the process here
-    // process.exit(1);
   }
 };
 
